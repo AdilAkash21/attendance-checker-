@@ -32,11 +32,12 @@ export default function AttendanceRecords() {
   const [saving, setSaving] = useState(false)
 
   const fetchRecords = useCallback(async () => {
-    const res = await api.get('/attendance/all')
+    const res = await api.get('/attendance/all', { params: subject ? { subject } : {} })
     setRecords(res.data)
-  }, [])
+  }, [subject])
 
   useEffect(() => {
+    setLoading(true)
     fetchRecords().catch(() => toast.error('Failed to load records')).finally(() => setLoading(false))
   }, [fetchRecords])
 

@@ -23,6 +23,12 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  useEffect(() => {
+    const onUnauth = () => setUser(null)
+    window.addEventListener('auth:unauthorized', onUnauth)
+    return () => window.removeEventListener('auth:unauthorized', onUnauth)
+  }, [])
+
   const login = async (email, password) => {
     const res = await api.post('/auth/login', { email, password })
     localStorage.setItem('token', res.data.token)
